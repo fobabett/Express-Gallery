@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var imageController = require('./images');
+var _Image = require('../models/image');
 
 
 var Routes = function(app) {
