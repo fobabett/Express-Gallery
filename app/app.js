@@ -10,12 +10,13 @@ var methodOverride = require('method-override');
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/users');
-var Image = require('../models/images');
+var _Image = require('./models/image');
+
+
+var User = require('./models/user');
 // middlewares
 
 app.use(methodOverride('_method'));
-
 /*
 
   Express JS session cookie ID and secret pass
@@ -33,8 +34,8 @@ app.use(session(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('html', require('jade').__express);
 app.set('view engine', 'html');
-app.set('views', __dirname + '/../views');
-app.use(express.static(__dirname + '/../')); 
+app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/')); 
 app.use(passport.initialize());
 app.use(passport.session());
 module.exports = app;
@@ -62,7 +63,7 @@ passport.deserializeUser(function(obj, done) {
       if (err) throw err;
       console.log(user);
       done(err, user);
-    })
+    });
     
 });
 
@@ -104,7 +105,7 @@ passport.use(new LocalStrategy(
 
 //   Defines the validPassword function
 
-// */
+
 // userSchema.methods.validPassword = function (check_password) {
 //   return (passwordCrypt(check_password) === this.password);
 // };
@@ -113,10 +114,10 @@ passport.use(new LocalStrategy(
 
 /*
 
-  Image model
+  _Image model
 
 */
-// var Image = mongoose.model('image', {
+
 //   author: String,
 //   title: String,
 //   url: String,
@@ -129,8 +130,35 @@ passport.use(new LocalStrategy(
 
 */
 
+function get(url){
+  // return new promise
+  return new Promise(function (resolve,reject){
+    var req = new XMLHttpRequest();
+    req.open('GET',url);
+    req.onload = function(){
+      // Check if the request is ok with code 200
+      if (req.status === 200){
+        resolve(req.response);
+      }
+      else {
+        // reject w/ error message
+        reject(Error(req.statusText));
+      }
+    };
+    // this will handle Network Errors
+    req.onerror = function() {
+      reject(Error("Network Error"));
+    };
+    // If everythings good, make the request
+    req.send();
+  })
+}
+
+
 app.get('/', function (req, res){
-  Image.find({}, function (err, docs){
+  console.log(_Image.find);
+  _Image.find({}, function (err, docs){
+
     if (err) {
       throw err;
     }
@@ -152,6 +180,7 @@ app.get('/', function (req, res){
       // if idex is not undefined
     }
     last.push(docs.pop());
+
     res.render("index.jade",{
       images: docs,
       header: last,
@@ -175,13 +204,13 @@ app.get('/new_photo', function (req, res){
 
 // params id accesses whatever is after the gallery/
 app.get('/gallery/:id', function (req, res){
-  Image.findOne({_id:req.params.id},function (err, image){
+  _Image.findOne({_id:req.params.id},function (err, image){
     if (err){
       throw err;
     }
     if (image){
 // find all images except for the image that matches :id
-      Image.find({_id: {'$ne': req.params.id }},function(err,sidebarimages){
+      _Image.find({_id: {'$ne': req.params.id }},function(err,sidebarimages){
         if (err){
           throw err;
         }
@@ -206,7 +235,7 @@ app.get('/gallery/:id', function (req, res){
 */
 
 app.post('/gallery',function (req, res){
-  var image = new Image(req.body);
+  var image = new _Image(req.body);
   image.save(function (err, image){
     if (err){
       throw err;
@@ -223,7 +252,7 @@ app.post('/gallery',function (req, res){
 */
 
 app.get('/gallery/:id/edit', function (req, res){
-  Image.findOne({_id:req.params.id},function (err, image){
+  _Image.findOne({_id:req.params.id},function (err, image){
     if (err){
       throw err;
     }
@@ -245,7 +274,7 @@ app.get('/gallery/:id/edit', function (req, res){
 
 app.put('/gallery/:id', function (req, res){
   console.log(req.body)
-  Image.findOne({_id:req.params.id},function (err, image){
+  _Image.findOne({_id:req.params.id},function (err, image){
     if (err){
       throw err;
     }
@@ -275,7 +304,7 @@ app.put('/gallery/:id', function (req, res){
  
 app.delete('/gallery/:id', function (req, res){
   console.log("delete",req.params.id);
-  Image.findOneAndRemove({_id:req.params.id},function (err,image){
+  _Image.findOneAndRemove({_id:req.params.id},function (err,image){
     if (err){
       throw err;
     }
