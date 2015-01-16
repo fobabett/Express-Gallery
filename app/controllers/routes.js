@@ -1,7 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var _Image = require('./models/image');
-console.log('routes.js');
+
 
 var Routes = function(app) {
   function get(url){
