@@ -13,6 +13,7 @@ var _Image = require('./models/image');
 
 
 
+
 var User = require('./models/user');
 // middlewares
 
@@ -89,8 +90,12 @@ passport.use(new LocalStrategy(
   }
 ));
 
-var Routes = require('./routes');
+var Routes = require('./controllers/routes');
 Routes(app);
+
+var images = require('./controllers/images');
+
+
 
 var server = app.listen(3000, function (){
   var host = server.address().address;
