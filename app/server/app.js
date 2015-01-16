@@ -10,6 +10,8 @@ var methodOverride = require('method-override');
 var crypto = require('crypto');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var User = require('../models/users');
+var Image = require('../models/images');
 // middlewares
 
 app.use(methodOverride('_method'));
@@ -92,34 +94,34 @@ passport.use(new LocalStrategy(
 
 */
 
-var userSchema = mongoose.Schema({
-  username: String,
-  password: String
+// var userSchema = mongoose.Schema({
+//   username: String,
+//   password: String
 
-});
+// });
 
-/*
+// /*
 
-  Defines the validPassword function
+//   Defines the validPassword function
 
-*/
-userSchema.methods.validPassword = function (check_password) {
-  return (passwordCrypt(check_password) === this.password);
-};
+// */
+// userSchema.methods.validPassword = function (check_password) {
+//   return (passwordCrypt(check_password) === this.password);
+// };
 
-var User = mongoose.model('users', userSchema);
+// var User = mongoose.model('users', userSchema);
 
 /*
 
   Image model
 
 */
-var Image = mongoose.model('image', {
-  author: String,
-  title: String,
-  url: String,
-  description: String
-});
+// var Image = mongoose.model('image', {
+//   author: String,
+//   title: String,
+//   url: String,
+//   description: String
+// });
 
 /* 
 
