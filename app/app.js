@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
 var secret = process.env.DBPASS;
-mongoose.connect('mongodb://dmeowmixer:'+secret+'@ds027771.mongolab.com:27771/winharder');
+mongoose.connect('mongodb://dmeowmixer:saltnpepper@ds027771.mongolab.com:27771/winharder');
 var session = require('express-session');
 var Schema = mongoose.Schema;
 var methodOverride = require('method-override');
