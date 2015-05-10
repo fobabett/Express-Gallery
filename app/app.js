@@ -10,7 +10,12 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 // var _Image = require('./models/image');
-var config = require('./config.json');
+var config = app.use(session(
+{
+  secret: 'faka wot',
+  resave: false,
+  saveUninitialized: true
+}));
 
 
 
@@ -25,12 +30,12 @@ app.use(methodOverride('_method'));
 
 */
 
-// app.use(session(
-// {
-//   secret: 'faka wot',
-//   resave: false,
-//   saveUninitialized: true
-// }));
+app.use(session(
+{
+  secret: 'faka wot',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
