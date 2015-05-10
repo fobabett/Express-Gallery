@@ -12,7 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // var _Image = require('./models/image');
 var config = app.use(session(
 {
-  secret: 'faka wot',
+  secret: 'saltnpepper',
   resave: false,
   saveUninitialized: true
 }));
