@@ -17,6 +17,9 @@ var config = app.use(session(
   saveUninitialized: true
 }));
 
+var port = process.env.PORT || 3000;
+app.listen(port);
+
 
 
 
