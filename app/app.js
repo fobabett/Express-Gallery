@@ -9,7 +9,6 @@ var Schema = mongoose.Schema;
 var methodOverride = require('method-override');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-// var _Image = require('./models/image');
 var config = app.use(session(
 {
   secret: 'saltnpepper',
@@ -24,15 +23,7 @@ app.listen(port);
 
 
 var User = require('./models/user');
-// middlewares
-
 app.use(methodOverride('_method'));
-/*
-
-  Express JS session cookie ID and secret pass
-
-*/
-
 app.use(session(
 {
   secret: 'faka wot',
@@ -51,22 +42,12 @@ app.use(passport.session());
 module.exports = app;
 
 
-/*
 
-  Passport session start upon user identification and verify.
-
-*/
 passport.serializeUser(function(user, done) {
   console.log(user);
     done(null, user);
 });
 
-/*
-
-  Passport session end!
-
-*/
- 
 passport.deserializeUser(function(obj, done) {
   console.log(obj);
     User.findById(obj._id, function (err, user){
@@ -77,12 +58,6 @@ passport.deserializeUser(function(obj, done) {
     
 });
 
-
-/*
-
-  Finds one User with the username : ***** runs validation check
-
-*/
 passport.use(new LocalStrategy(
   function(username, password, done) {
     User.findOne({ username: username }, function(err, user) {

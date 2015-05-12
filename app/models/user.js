@@ -14,12 +14,10 @@ userSchema.methods.validPassword = function (check_password) {
 function passwordCrypt(password) {
   var salt = process.env.SALT;
     var user_password = password;
-    var salted_user_password = user_password + salt; //plz pass the salt
+    var salted_user_password = user_password + salt; 
     var shasum = crypto.createHash('sha512');
     shasum.update( salted_user_password );
     var input_result = shasum.digest('hex');
-  
-    // req.body.password = input_result;
     return input_result
 }
 

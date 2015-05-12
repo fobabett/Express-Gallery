@@ -6,25 +6,20 @@ var _Image = require('../models/image');
 
 var Routes = function(app) {
   function get(url){
-  // return new promise
   return new Promise(function (resolve,reject){
     var req = new XMLHttpRequest();
     req.open('GET',url);
     req.onload = function(){
-      // Check if the request is ok with code 200
       if (req.status === 200){
         resolve(req.response);
       }
       else {
-        // reject w/ error message
         reject(Error(req.statusText));
       }
     };
-    // this will handle Network Errors
     req.onerror = function() {
       reject(Error("Network Error"));
     };
-    // If everythings good, make the request
     req.send();
   })
 }
@@ -35,24 +30,12 @@ app.get('/', imageController.indexRender);
   app.get('/new_photo', function (req, res){
     res.render("newphoto.jade");
   })
-  
-  
-  /*
-  
-    GET /gallery/:id to see single photo
-    Each photo should include Delete link for itself
-    should include a edit 
-  
-  */
-  
-  // params id accesses whatever is after the gallery/
   app.get('/gallery/:id', function (req, res){
     _Image.findOne({_id:req.params.id},function (err, image){
       if (err){
         throw err;
       }
       if (image){
-  // find all images except for the image that matches :id
         _Image.find({_id: {'$ne': req.params.id }},function(err,sidebarimages){
           if (err){
             throw err;
@@ -65,18 +48,6 @@ app.get('/', imageController.indexRender);
       }
     })
   });
-  
-  
-  
-  
-  
-  
-  /*
-  
-    POST to create a new gallery photo
-  
-  */
-  
   app.post('/gallery',function (req, res){
     var image = new _Image(req.body);
     image.save(function (err, image){
@@ -86,14 +57,6 @@ app.get('/', imageController.indexRender);
       res.redirect('/');
     });
   });
-  
-  
-  /*
-  
-    Get the image by id, render edit template edit.jade, pass the image as a local (just like other route)
-  
-  */
-  
   app.get('/gallery/:id/edit', function (req, res){
     _Image.findOne({_id:req.params.id},function (err, image){
       if (err){
@@ -104,17 +67,6 @@ app.get('/', imageController.indexRender);
       }
     })
   })
-  
-  
-  
-  
-  
-  /*
-  
-    Put gallery/:id updates single gallery photo identified by id param
-  
-  */
-  
   app.put('/gallery/:id', function (req, res){
     console.log(req.body)
     _Image.findOne({_id:req.params.id},function (err, image){
@@ -139,12 +91,6 @@ app.get('/', imageController.indexRender);
       }
     })
   });
-  
-  
-  
-  // DELETE gallery/:id to delete single photo
-  // - `DELETE /gallery/:id` to delete a single gallery photo identified by the `:id` param
-   
   app.delete('/gallery/:id', function (req, res){
     console.log("delete",req.params.id);
     _Image.findOneAndRemove({_id:req.params.id},function (err,image){
@@ -157,30 +103,16 @@ app.get('/', imageController.indexRender);
     })
     
   });
-  
-  //user authentication
-  
   app.get('/login', function (req, res) {
-    //res.render("login", { user: req.user, messages: req.flash('error') });
     res.render("login.jade")
   });
-  
-  
   app.get('/secretRoom', ensureAuthenticated, function (req, res){
     res.send("welcome to the secret room")
-  
-  });
-  
+  }); 
   app.get('/registration', function (req, res){
     res.render("registration.jade")
   });
-  
-  //Saves user registration info
-  
-  //checking if username exists
   app.post('/registration', function (req, res){
-  
-    
     User.findOne({username: req.body.username}, function(err, user){
       if (err) {
         return err;
@@ -200,8 +132,6 @@ app.get('/', imageController.indexRender);
       }
     });
   });
-  
-  //post request authentication
   app.post('/login',
     passport.authenticate('local', {
       successRedirect: '/secretRoom',
@@ -210,17 +140,13 @@ app.get('/', imageController.indexRender);
     })
   
   );
-  
   app.get('/login', function(req,res){
     res.render("login", {user: req.user, messages: "error"})
   });
-  
-  //post log out
   app.get('/logout', function(req, res){
     req.logout();
     res.redirect('/login');
   });
-  
   function ensureAuthenticated(req, res, next){
     console.log(req.user)
     console.log(req.isAuthenticated())
