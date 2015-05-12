@@ -10,11 +10,11 @@ body
         a(href="/")
           h1.logo _architekt
       .large-3.small-3.columns    
-        a(href="/new_photo")
+        //- a(href="/new_photo")
           img.add_icon(src="/layout/svg/add.svg")
         div 
           a(href="/logout")
-            button(type="button") Logout   
+            button(type="button") Login   
         p.show-for-large-up Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
   .row
     .large-12.columns      
@@ -30,9 +30,9 @@ body
                     p.img_info= image.description 
                     p.img_info.copyright= 'Copyright '+image.url   
                   .img_options.clearfix
-                    a(href="/gallery/"+image.id+"/edit")
+                    //- a(href="/gallery/"+image.id+"/edit")
                       img.edit_icon(src="/layout/svg/edit.svg")
-                    form(action='/gallery/'+image.id+'?_method=DELETE',method='POST')
+                    //- form(action='/gallery/'+image.id+'?_method=DELETE',method='POST')
                       button.delete_icon(type="submit")
           .large-3.columns              
             #sidebar.show-for-large-up
